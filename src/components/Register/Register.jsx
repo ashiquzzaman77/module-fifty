@@ -1,34 +1,44 @@
-
 import React from 'react';
 
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
+import 'react-toastify/dist/ReactToastify.css';
+import { auth } from '../../firebase.init';
 
 const Register = () => {
 
     const handleRegister = (event) => {
         event.preventDefault();
-        console.log(event.target.email.value);
 
-        const success = true;
+        const email = event.target.email.value;
+        const password = event.target.password.value;
 
-        if (success) {
-            toast.success('Registration successful!');
-        } else {
-            toast.error('Registration failed. Please try again.');
-        }
-    }
+        console.log('Email:', email);
+        console.log('Password:', password);
+
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((result) => {
+
+                console.log(result.user);
+                toast.success('Registration successful!');
+            })
+            .catch((error) => {
+
+                console.error(error);
+                toast.error('Registration failed. Please try again.');
+            });
+    };
 
     return (
-        <div className='max-w-96 mx-auto'>
+        <div className="max-w-96 mx-auto">
 
             <form onSubmit={handleRegister}>
 
-                <h2 className='my-5 text-2xl'>Register Form</h2>
+                <h2 className="my-5 text-2xl">Register Form</h2>
 
                 <label className="input input-bordered rounded-sm flex items-center gap-2">
-
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -39,12 +49,10 @@ const Register = () => {
                         <path
                             d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
                     </svg>
-
-                    <input type="email" name='email' className="grow" placeholder="Email" />
+                    <input type="email" name="email" className="grow" placeholder="Email" required />
                 </label>
 
                 <label className="input input-bordered rounded-sm flex items-center gap-2 my-4">
-
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -55,8 +63,7 @@ const Register = () => {
                             d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
                             clipRule="evenodd" />
                     </svg>
-
-                    <input type="password" className="grow" placeholder="Password" />
+                    <input type="password" name="password" className="grow" placeholder="Password" required />
                 </label>
 
                 <button className="btn btn-secondary">Register Now</button>
@@ -64,7 +71,6 @@ const Register = () => {
                 <ToastContainer />
 
             </form>
-
         </div>
     );
 };
