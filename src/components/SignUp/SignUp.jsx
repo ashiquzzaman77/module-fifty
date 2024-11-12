@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase.init';
@@ -7,6 +8,7 @@ import { auth } from '../../firebase.init';
 const SignUp = () => {
 
     const [success, setSuccess] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleSingUp = e => {
@@ -14,6 +16,7 @@ const SignUp = () => {
 
         const email = e.target.email.value;
         const password = e.target.password.value;
+        const terms = e.target.terms.checked;
 
         console.log('Email:', email);
         console.log('Password:', password);
@@ -23,6 +26,19 @@ const SignUp = () => {
 
         if (password.length < 6) {
             setErrorMessage('Password Lenght minnimum 6 Char');
+            return;
+        }
+        
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+            setErrorMessage('At Password Uppercase & Lowercase');
+            return;
+        }
+
+        if (!terms) {
+            setErrorMessage('Fill Up terms');
             return;
         }
 
@@ -54,12 +70,22 @@ const SignUp = () => {
                     <input type="email" name='email' placeholder="email" className="input input-bordered" required />
                 </div>
 
-                <div className="form-control">
+                <div className="form-control relative">
                     <label className="label">
                         <span className="label-text">Password</span>
                     </label>
-                    <input type="password" name='password' placeholder="password" className="input input-bordered" required />
+                    <input type={showPassword ? 'text' : 'password'} name='password' placeholder="password" className="input input-bordered" required />
+                    <button type='button' onClick={() => setShowPassword(!showPassword)} className='absolute right-3 top-12 pt-1'>
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
 
+                </div>
+
+                <div className="form-control">
+                    <label className="label cursor-pointer justify-start">
+                        <input type="checkbox" name='terms' className="checkbox me-3" />
+                        <span className="label-text">Remember me</span>
+                    </label>
                 </div>
 
                 <div className="form-control mt-6">
