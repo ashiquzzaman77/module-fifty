@@ -1,11 +1,23 @@
 
 import React from 'react';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const Register = () => {
 
     const handleRegister = (event) => {
         event.preventDefault();
         console.log(event.target.email.value);
+
+        const success = true;
+
+        if (success) {
+            toast.success('Registration successful!');
+        } else {
+            toast.error('Registration failed. Please try again.');
+        }
     }
 
     return (
@@ -49,7 +61,10 @@ const Register = () => {
 
                 <button className="btn btn-secondary">Register Now</button>
 
+                <ToastContainer />
+
             </form>
+
         </div>
     );
 };
