@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword,sendEmailVerification } from 'firebase/auth';
 import { auth } from '../../firebase.init';
 
 const SignUp = () => {
@@ -28,7 +28,7 @@ const SignUp = () => {
             setErrorMessage('Password Lenght minnimum 6 Char');
             return;
         }
-        
+
 
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -46,11 +46,17 @@ const SignUp = () => {
             .then((result) => {
 
                 console.log(result.user);
-                setSuccess(true)
+                setSuccess(true);
+
+                sendEmailVerification(auth.currentUser)
+                    .then(() => {
+                        console.log('Email Sent Verfication')
+                    });
             })
+
             .catch((error) => {
 
-                console.error(error.message);
+                console.log(error.message);
                 setErrorMessage(error.message);
                 setSuccess(false)
             });
